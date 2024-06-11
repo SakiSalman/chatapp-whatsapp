@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+._container {
+    max-width: 1440px;
+    margin: auto;
+    padding: 0 5%;
+}
+
+@media screen and (max-width: 768px) {
+    ._container {
+        max-width: 100%;
+        padding: 0 3%;
+    }
+}
+
+.scrollbar-thin{
+    cursor: pointer;
+}
+.sender-card{
+    position: relative;
+    z-index: 222;
+}
+.sender-card::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(255, 255, 255);
+    clip-path: polygon(100% 0, 0 46%, 100% 100%);
+    z-index: -1;
+    border-radius: 0 10px;
+}
+.reciver-card{
+    position: relative;
+    z-index: 222;
+}
+.reciver-card::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: #d9fdd3;
+    clip-path: polygon(0 0, 100% 46%, 0 100%);
+    z-index: -1;
+    border-radius: 0 10px;
+}
+
+
