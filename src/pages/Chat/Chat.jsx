@@ -9,7 +9,7 @@ import { FaCamera } from "react-icons/fa";
 import ChatBodyCards from './components/ChatBodyCards';
 const Chat = () => {
   return (
-    <div className='w-full h-full grid grid-cols-12 overflow-hidden'>
+    <div className='w-full h-full grid grid-cols-12 overflow-hidden rounded-md'>
         <div className='bg-white col-span-4'>
            <div>
              {/* top nav */}
