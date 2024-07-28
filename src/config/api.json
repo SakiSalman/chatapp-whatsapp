@@ -1,0 +1,4 @@
+{
+    "register" : "user/register",
+    "tokenActivation" : "user/activation"
+}

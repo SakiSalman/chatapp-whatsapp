@@ -1,10 +1,11 @@
-import { useSelector } from "react-redux";
+
 import { Navigate, Outlet } from "react-router-dom";
+import { useGlobalStore } from "../store/globalStore";
 
 const PrivateGard = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useGlobalStore()
 
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  return user ? <Outlet /> : <Navigate to="/auth" />;
 };
 
 export default PrivateGard;
