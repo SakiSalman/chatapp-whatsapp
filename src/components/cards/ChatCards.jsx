@@ -4,7 +4,7 @@ const ChatCards = () => {
   return (
     <div className='h-[510px] w-full overflow-y-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-slate-100 overflow-y-scrol'>
     {
-        [...Array(10)].map((_, i) => <div className="grid grid-cols-12 items-center p-3 cursor-pointer hover:bg-slate-200 duration-500 transition-all">
+        [...Array(10)].map((_, i) => <div key={i} className="grid grid-cols-12 items-center p-3 cursor-pointer hover:bg-slate-200 duration-500 transition-all">
         <div className='w-10 col-span-2'>
             <img width={30} className='ring rounded-full ring-indigo-700' src="/images/3541871.png" alt="" />
         </div>

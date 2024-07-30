@@ -1,9 +1,21 @@
 import React, { useState } from "react";
 import { useCRUD } from "../../hooks/useCrud";
 import { useGlobalStore } from "../../store/globalStore";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const { user, setUser, loading}= useGlobalStore()
+    const navigate = useNavigate()
+  const requiredFieldsLogin  = [
+    {
+      key : "email",
+      name : "Email",
+    },
+    {
+      key : "password",
+      name : "Password"
+    }
+  ]
   const requiredFields  = [
     {
       key : "name",
@@ -18,7 +30,7 @@ const Login = () => {
       name : "Password"
     }
   ]
-  const {api, isLoading, postMutation, handlePOST} = useCRUD()
+  const {api, isLoading, postMutation, handlePOST, warn} = useCRUD()
     const [registerFields, setRegisterFields] = useState({
         name: "",
         email: "",
@@ -30,11 +42,6 @@ const Login = () => {
     });
     const [login, setLogin] = useState(false);
 
-    const handleSubmitLogin = () => {
-        if (!loginFiels?.name || !loginFiels?.Login) {
-        }
-    };
-
     const onChange = (e, setForm) => {
         e.preventDefault();
         setForm((prev) => ({
@@ -42,9 +49,30 @@ const Login = () => {
             [e.target.name]: e.target.value,
         }));
     };
-
+    const handleSubmitLogin = async() => {
+        try {
+            const res =  await handlePOST(
+                {
+                  body : loginFiels,
+                  requiredFields : requiredFieldsLogin,
+                  url : api.login,
+                  mutation : postMutation
+                }
+          
+               )
+            if (res?.statusCode === 200 && res?.user?._id) {
+                const token = JSON.stringify(res?.user?.token)
+                localStorage.setItem("token", token)
+                setUser(res.user)
+                navigate('/chat')
+             }
+        } catch (error) {
+            warn("Server Error!")
+            console.log('error', error)
+        }
+        
+    }
     const handleSubmit = async () => {
-      console.log("trigered===", registerFields);
      const res =  await handlePOST(
       {
         body : registerFields,
@@ -55,12 +83,13 @@ const Login = () => {
 
      )
      if (res.statusCode === 200 && res.data) {
-        console.log(res.data);
+        const token = JSON.stringify(res.data.token)
+        localStorage.setItem("activatioToken", token)
+        localStorage.setItem("activationEmail", res.data.email)
+        navigate('/activation')
         setUser(res.data)
      }
     }
-
-    console.log("item====", user);
     return (
         <div className="w-full">
             {!login && (
@@ -72,12 +101,14 @@ const Login = () => {
                         <input
                             onChange={(e) => onChange(e, setLoginFiels)}
                             type="email"
+                            name="email"
                             placeholder="Enter Email Address"
                             className="w-full p-3 border border-green-600 rounded-md outline-none"
                         />
                         <input
                             onChange={(e) => onChange(e, setLoginFiels)}
                             type="password"
+                            name="password"
                             placeholder="Enter Password"
                             className="w-full p-3 border border-green-600 rounded-md outline-none"
                         />

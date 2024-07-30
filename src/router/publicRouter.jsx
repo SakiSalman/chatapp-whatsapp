@@ -14,6 +14,11 @@ const publicRouter = [
         path: "/chat",
         element: <Chat />,
       },
+      
+      {
+        path: "/login",
+        element: <Login />,
+      },
       {
         path: "/auth",
         element: <Login />,

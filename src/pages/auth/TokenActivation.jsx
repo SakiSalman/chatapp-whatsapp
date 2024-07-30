@@ -23,10 +23,12 @@ const TokenActivation = () => {
             } else {
                 warn("Invalid Token!");
                 setError("Something Wrong!")
+                navigate("/login");
             }
         } catch (error) {
             console.log(error);
             setError("Something Wrong!")
+            navigate("/login");
         }
     };
     useEffect(() => {
