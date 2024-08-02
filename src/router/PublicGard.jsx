@@ -3,9 +3,8 @@ import { useGlobalStore } from "../store/globalStore";
 
 const PublicGard = () => {
   const { user } = useGlobalStore();
-
-  if (localStorage.getItem("user")) {
-    return user ? <Navigate to="/" /> : <Outlet />;
+  if (user?.token) {
+    return user?.token ? <Navigate to="/" /> : <Outlet />;
   }
 
   return <Outlet />;

@@ -9,12 +9,7 @@ import PublicGard from "./PublicGard";
 const publicRouter = [
   {
     element : <PublicGard/>,
-    children : [
-      {
-        path: "/chat",
-        element: <Chat />,
-      },
-      
+    children : [      
       {
         path: "/login",
         element: <Login />,

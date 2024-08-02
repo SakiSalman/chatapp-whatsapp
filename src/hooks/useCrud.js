@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { getData, postData, postFormData, patchData, patchFormData, deleteData } from '../utils/apiCore.js';
 
 export const useCRUD = () => {
-    const router = useNavigate()
+    // const router = useNavigate()
     const { warn, error, success } = useToast();
     const queryClient = useQueryClient();
     // For Skeleton Loading
@@ -185,8 +185,7 @@ export const useCRUD = () => {
     return {
         queryResponse, getMutation, deleteMutation, postMutation, postFormMutation,
         patchMutation, patchFormMutation, queryClient,
-        validation, handlePOST, showLoader, handleChange, setShowLoader, fetchDataInUseEffect,
-        router, warn, success, api, isLoading,
+        validation, handlePOST, showLoader, handleChange, setShowLoader, fetchDataInUseEffect, warn, success, api, isLoading,
         selectedItem, setSelectedItem, deleteModal, setDeleteModal, addModal, setAddModal, editModal, setEditModal, openDeleteModal, handleDELETEApi, openEditModal,
     }
 }

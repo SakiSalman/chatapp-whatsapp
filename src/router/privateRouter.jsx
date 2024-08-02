@@ -10,6 +10,10 @@ const privateRouter = [
         path: "/",
         element: <Chat />
       },
+      {
+        path: "/chat",
+        element: <Chat />,
+      },
     ]
   }
 ]
