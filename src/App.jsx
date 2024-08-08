@@ -8,7 +8,7 @@ import { getData } from "./utils/apiCore";
 import { useEffect } from "react";
 
 function App() {
-  const { user, setUser } = useGlobalStore()
+  const { user, setUser, recieverId, setChats } = useGlobalStore()
   const {api} = useCRUD()
   const checkUser = async() => {
     const tokenLs = localStorage.getItem("token")
@@ -20,9 +20,15 @@ function App() {
       localStorage.setItem("token",res?.user?.token)
     }else{
       setUser(null)
-      localStorage.removeItem("token")
+      // localStorage.removeItem("token")
     }
+    }else{
+      setUser({})
     }
+  }
+
+  const getChats = () => {
+    
   }
   useEffect(() => {
     checkUser()

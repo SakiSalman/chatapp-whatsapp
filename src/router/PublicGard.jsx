@@ -3,7 +3,7 @@ import { useGlobalStore } from "../store/globalStore";
 
 const PublicGard = () => {
   const { user } = useGlobalStore();
-  if (user?.token) {
+  if (user) {
     return user?.token ? <Navigate to="/" /> : <Outlet />;
   }
 

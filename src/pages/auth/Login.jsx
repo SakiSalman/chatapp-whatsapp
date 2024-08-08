@@ -61,7 +61,7 @@ const Login = () => {
           
                )
             if (res?.statusCode === 200 && res?.user?._id) {
-                const token = JSON.stringify(res?.user?.token)
+                const token = res?.user?.token
                 localStorage.setItem("token", token)
                 setUser(res.user)
                 navigate('/chat')
@@ -83,7 +83,7 @@ const Login = () => {
 
      )
      if (res.statusCode === 200 && res.data) {
-        const token = JSON.stringify(res.data.token)
+        const token = res.data.token
         localStorage.setItem("activatioToken", token)
         localStorage.setItem("activationEmail", res.data.email)
         navigate('/activation')

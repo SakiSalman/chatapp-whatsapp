@@ -3,5 +3,8 @@
     "allUsers" : "user",
     "register" : "user/register",
     "login" : "user/login",
-    "tokenActivation" : "user/activation"
+    "tokenActivation" : "user/activation",
+    "chats" : {
+        "createChat" : "chat"
+    }
 }

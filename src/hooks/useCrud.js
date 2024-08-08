@@ -38,14 +38,18 @@ export const useCRUD = () => {
     // const postMutation = useMutation(({ url, body }) => postData({ url, body }));
     // const patchMutation = useMutation(({ url, body }) => patchData({ url, body }));
 
-    const postFormMutation = useMutation(({ url, body }) => {
-        const formData = new FormData();
-        for (const [key, value] of Object.entries(body)) formData.append(key, value);
-        if (body['special_attributes']?.length > 0) {
-            for (const key of body['special_attributes']) if (body[`${key}`]?.length > 0) for (const image of body[`${key}`]) formData.append(key, image)
+    const postFormMutation = useMutation(
+        {
+            mutationFn : ({ url, body }) => {
+                const formData = new FormData();
+                for (const [key, value] of Object.entries(body)) formData.append(key, value);
+                if (body['special_attributes']?.length > 0) {
+                    for (const key of body['special_attributes']) if (body[`${key}`]?.length > 0) for (const image of body[`${key}`]) formData.append(key, image)
+                }
+                return postFormData({ url, body: formData })
+            }
         }
-        return postFormData({ url, body: formData })
-    })
+    )
     const patchFormMutation = useMutation(({ url, body }) => {
         const formData = new FormData();
         for (const [key, value] of Object.entries(body)) formData.append(key, value);
@@ -113,9 +117,8 @@ export const useCRUD = () => {
             setShowLoader(true);
             try {
                 const response = await mutation.mutateAsync({ url, body })
-                console.log("iinner", response);
                 if (response?.token || response?.statusCode == 200 || response?.statusCode == 201) {
-                    success(response?.message);
+                    response?.message && success(response?.message);
                     return response;
                 } else {
                     error(response?.message);

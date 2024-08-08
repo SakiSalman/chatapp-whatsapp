@@ -12,19 +12,52 @@ import { useEffect, useState } from "react";
 import CheckOutsideClick from "../../components/checkoutsideClick/CheckOutsideClick";
 import { getData } from "../../utils/apiCore";
 import { useCRUD } from "../../hooks/useCrud";
+import { useGlobalStore } from "../../store/globalStore";
+import { RiChatNewLine } from "react-icons/ri";
+import AddChat from "../../components/all-users/AddChat";
+import EmptyChat from "./components/EmptyChat";
 const Chat = () => {
+    const {handlePOST, api, warn,postFormMutation}=useCRUD()
+    const {user, chats,setChats,recieverId,setReciverId} = useGlobalStore()
+    const [showNewChat, setShowNewChat] = useState(false)
     const [showImoji, setShowImoji] = useState(false);
+    const [message, setMessage] = useState('')
     const handleImojiClick = (e) => {
         console.log(e);
     };
+    const handleCloseNewChat= () => {
+        setShowNewChat(false)
+    }
+    const handleOpenNewChat= () => {
+        console.log("trigered");
+        
+        setShowNewChat(true)
+    }    
+
+    const handleSendMessage  = async (e) => {
+        if (e.key === "Enter" && message !="") {
+            const rs = await handlePOST({
+                url : api.chats.createChat,
+                requiredFields : [],
+                body : message,
+                mutation : postFormMutation
+            })
+            console.log("response", rs);
+        }
+        
+    }
+    const onClickCard = (user) =>{
+        setReciverId(user?._id)
+    }
     return (
-        <div className="w-full h-full grid grid-cols-12 overflow-hidden rounded-md">
-            <div className="bg-white col-span-4">
+        <div className="w-full h-full grid grid-cols-12 overflow-hidden rounded-md z-50">
+            <div className="bg-white col-span-4 relative">
                 <div>
                     {/* top nav */}
-                    <SideTopbar />
+                    <SideTopbar showNewChat={showNewChat} handleOpenNewChat={handleOpenNewChat}/>
                     {/* message cards */}
-                    <ChatCards />
+                    <ChatCards users={user?.users}/>
+                    <AddChat onClickCard={onClickCard} showNewChat={showNewChat} handleCloseNewChat={handleCloseNewChat}/>
                 </div>
             </div>
             <div className="col-span-8">
@@ -34,8 +67,9 @@ const Chat = () => {
                 </div>
                 {/* chat body */}
                 <div>
-                    {/* chat body */}
-                    <ChatBodyCards />
+                {
+                    recieverId ? <ChatBodyCards /> :                         <EmptyChat/>
+                }
                 </div>
                 {/* chat body bottom bar */}
                 <div className="h-[60px] bg-[#F0F2F5] p-3 items-center">
@@ -66,15 +100,18 @@ const Chat = () => {
                             <div className="flex items-center gap-3">
                                 <FaCamera />
                                 <input
+                                    onChange={(e) => setMessage(e.target.value)}
                                     type="text"
+                                    value={message}
                                     placeholder="Type a message"
                                     className="w-full bg-transparent outline-none"
+                                    onKeyDown={(e) => handleSendMessage(e)}
                                 />
                             </div>
                         </div>
                         <div className="col-span-1 flex items-center gap-x-2">
                             <HiMiniMicrophone className="cursor-pointer" />
-                            <IoSendSharp className="cursor-pointer" />
+                            <IoSendSharp onClick={(e) => handleSendMessage(e)} className="cursor-pointer" />
                         </div>
                     </div>
                 </div>

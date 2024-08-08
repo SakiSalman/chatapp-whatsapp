@@ -6,11 +6,16 @@ import { useEffect } from "react";
 import { getData } from "../utils/apiCore";
 
 const PrivateGard = () => {
-  const { user } = useGlobalStore()
+  const { user, setUser } = useGlobalStore()
   const {api} = useCRUD()
   const getAllUserData = async(tk) => {
     const response = await getData({url : `${api.allUsers}/${tk}`})
-    console.log(response);
+    if (response.statusCode === 200){
+      setUser({
+        ...user,
+        users : response?.data?.length > 0 ?  response?.data : []
+      })
+    }
 }
 
 
@@ -18,8 +23,8 @@ useEffect(() => {
   if (user?.token) {
     getAllUserData(user?.token)
   }
-}, [user])
-  if (localStorage.getItem("token")) {
+}, [])
+  if (user) {
     return user?.token ? <Outlet /> : <Navigate to="/auth" />;
   }
   return <Navigate to="/auth" />
