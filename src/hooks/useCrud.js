@@ -24,13 +24,13 @@ export const useCRUD = () => {
     // const getMutation = useMutation(({ url }) => getData({ url }));
     // const deleteMutation = useMutation(({ url }) => deleteData({ url }));
     const postMutation = useMutation({
-        mutationFn: ({ url, body }) => postData({ url, body })
+        mutationFn: ({ url, body,token }) => postData({ url, body,token})
       })
     const deleteMutation = useMutation({
         mutationFn: ({ url, body }) => deleteData({ url })
       })
     const getMutation = useMutation({
-        mutationFn: ({ url, body }) => getData({ url })
+        mutationFn: ({ url, token }) => getData({ url, token })
       })
     const patchMutation = useMutation({
         mutationFn: ({ url, body }) => patchData({ url, body })
@@ -40,13 +40,13 @@ export const useCRUD = () => {
 
     const postFormMutation = useMutation(
         {
-            mutationFn : ({ url, body }) => {
+            mutationFn : ({ url, body, token }) => {
                 const formData = new FormData();
                 for (const [key, value] of Object.entries(body)) formData.append(key, value);
                 if (body['special_attributes']?.length > 0) {
                     for (const key of body['special_attributes']) if (body[`${key}`]?.length > 0) for (const image of body[`${key}`]) formData.append(key, image)
                 }
-                return postFormData({ url, body: formData })
+                return postFormData({ url, body: formData, token})
             }
         }
     )
@@ -112,11 +112,11 @@ export const useCRUD = () => {
     }
 
     // To post or patch
-    const handlePOST = async ({ requiredFields, extraValidation, mutation, url, body }) => {
+    const handlePOST = async ({ requiredFields, extraValidation, mutation, url, body, token }) => {
         if (validation({ body, requiredFields, extraValidation })) {
             setShowLoader(true);
             try {
-                const response = await mutation.mutateAsync({ url, body })
+                const response = await mutation.mutateAsync({ url, body, token })
                 if (response?.token || response?.statusCode == 200 || response?.statusCode == 201) {
                     response?.message && success(response?.message);
                     return response;

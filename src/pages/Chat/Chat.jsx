@@ -17,38 +17,64 @@ import { RiChatNewLine } from "react-icons/ri";
 import AddChat from "../../components/all-users/AddChat";
 import EmptyChat from "./components/EmptyChat";
 const Chat = () => {
-    const {handlePOST, api, warn,postFormMutation}=useCRUD()
-    const {user, chats,setChats,recieverId,setReciverId} = useGlobalStore()
+    const {handlePOST, api, warn,postFormMutation, postMutation, getMutation}=useCRUD()
+    const {user, chats,setChats,recieverId,setReceiverId} = useGlobalStore()
+    const [activeChats, setActiveChats] = useState([])
     const [showNewChat, setShowNewChat] = useState(false)
     const [showImoji, setShowImoji] = useState(false);
     const [message, setMessage] = useState('')
+    const [sendingMsg, setSendingMsg] = useState(false)
+    const handleClearChat = () => {
+        setMessage('')
+    }
     const handleImojiClick = (e) => {
-        console.log(e);
+        const newMessage = message + e.emoji
+        setMessage(newMessage)
     };
     const handleCloseNewChat= () => {
         setShowNewChat(false)
     }
     const handleOpenNewChat= () => {
         console.log("trigered");
-        
         setShowNewChat(true)
     }    
 
     const handleSendMessage  = async (e) => {
-        if (e.key === "Enter" && message !="") {
-            const rs = await handlePOST({
-                url : api.chats.createChat,
-                requiredFields : [],
-                body : message,
-                mutation : postFormMutation
-            })
-            console.log("response", rs);
+        if (!message || message === "") {
+            return warn("No Message Found!")
         }
-        
+        setSendingMsg(true)
+        const rs = await handlePOST({
+            url : api.chats.createChat,
+            requiredFields : [],
+            body : {
+                message : message,
+                receiverId : recieverId
+            },
+            mutation : postMutation,
+            token : user?.token
+        })           
+        if (rs?.data?.length > 0) {            
+            setActiveChats(rs?.data)
+            handleClearChat()
+        }   
+        setSendingMsg(false)
     }
-    const onClickCard = (user) =>{
-        setReciverId(user?._id)
+    const onClickCard = async(users) =>{        
+        setReceiverId(users?._id)
+        const rs = await getData({
+            url : `${api.chats.createChat}/${users?._id}`,
+            token:user?.token
+        })
+        if (rs?.statusCode === 200 && rs?.chat?.length > 0) {            
+            setActiveChats(rs?.chat)
+        }else{
+            setActiveChats([]) 
+        }           
     }
+
+    console.log(activeChats);
+    
     return (
         <div className="w-full h-full grid grid-cols-12 overflow-hidden rounded-md z-50">
             <div className="bg-white col-span-4 relative">
@@ -66,13 +92,13 @@ const Chat = () => {
                     <BodyTopBar />
                 </div>
                 {/* chat body */}
-                <div>
+                <div className="h-[500px] overflow-hidden">
                 {
-                    recieverId ? <ChatBodyCards /> :                         <EmptyChat/>
+                    recieverId && activeChats?.length > 0 ? <ChatBodyCards sendingMsg={sendingMsg} chatItem={activeChats} receiverId={recieverId} user={user}/> : <EmptyChat/>
                 }
                 </div>
                 {/* chat body bottom bar */}
-                <div className="h-[60px] bg-[#F0F2F5] p-3 items-center">
+                <div className={`h-[60px] bg-[#F0F2F5] p-3 items-center ${!recieverId ? "pointer-events-none" : ""}`}>
                     <div className="grid grid-cols-12 gap-4 items-center">
                         <div className="col-span-1 flex justify-between items-center relative">
                             <CheckOutsideClick
@@ -105,7 +131,6 @@ const Chat = () => {
                                     value={message}
                                     placeholder="Type a message"
                                     className="w-full bg-transparent outline-none"
-                                    onKeyDown={(e) => handleSendMessage(e)}
                                 />
                             </div>
                         </div>

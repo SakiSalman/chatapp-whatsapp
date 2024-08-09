@@ -36,7 +36,7 @@ function App() {
   return (
     <>
       <div className='bg-[url(/images/bg-2.jpg)] bg-cover bg-center bg-no-repeat h-screen py-14 flex justify-center items-center'>
-        <div className="_container h-[630px]">
+        <div className="_container">
           <div className="h-full flex justify-center items-center overflow-hidden">
             <RouterProvider router={router} />
           </div>

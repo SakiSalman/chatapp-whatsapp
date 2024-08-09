@@ -9,7 +9,7 @@ const AddChat = ({handleCloseNewChat,showNewChat, onClickCard}) => {
     const {user} = useGlobalStore()
 
   return (
-    <div className={`absolute top-0 right-0 bottom-0 p-3 bg-white transition-all duration-700 ${showNewChat === true ? "left-0 z-10" : "left-[-10000px] -z-50"}`}>
+    <div className={`absolute top-0 right-0 bottom-0 p-3 bg-white transition-all duration-700 ${showNewChat === true ? "left-0 z-10 opacity-100" : "left-[-10000px] -z-50 opacity-0"}`}>
         <div className='pt-[60px]'>
             <div className='mb-3'>
                 <button className='flex items-center gap-2 text-black font-semibold' onClick={handleCloseNewChat}>

@@ -8,5 +8,5 @@ export const useGlobalStore = create((set) => ({
   chats : [],
   setChats : (chats) => set({ user: chats }),
   recieverId : null,
-  setReciverId : (id) => set({ recieverId: id }),
+  setReceiverId : (id) => set({ recieverId: id }),
 }))

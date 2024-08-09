@@ -2,7 +2,7 @@ import React from 'react'
 
 const ChatCards = ({users=[], bio=false, onClickHandler}) => {
   return (
-    <div className='h-[510px] w-full overflow-y-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-slate-100 overflow-y-scrol'>
+    <div className='w-full overflow-y-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-slate-100 overflow-y-scrol'>
     {
         users?.length > 0 && 
         users?.map((user, i) => <div onClick={() => onClickHandler(user)} key={i} className="grid grid-cols-12 items-center p-3 cursor-pointer hover:bg-slate-200 duration-500 transition-all">

@@ -2,6 +2,8 @@
 import { server } from '../config/serverPoint';
 
 export async function getData({ url, token }) {
+    console.log("token", token);
+    
     const headers = {};
     headers['Content-Type'] = 'application/json'
     if (token) headers['Authorization'] = `Bearer ${token}`;
